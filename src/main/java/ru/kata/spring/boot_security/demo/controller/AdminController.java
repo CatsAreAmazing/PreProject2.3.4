@@ -28,7 +28,9 @@ public class AdminController {
     }
 
     @GetMapping()
-    public String index(Model model) {
+    public String index(Model model, Principal principal) {
+        User admin = userService.findByName(principal.getName());
+        model.addAttribute("admin", admin);
         model.addAttribute("users", userService.findAll());
         model.addAttribute("allRoles", roleService.findAll());
         model.addAttribute("user", new User());
@@ -37,17 +39,11 @@ public class AdminController {
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute("newUser") @Valid User user, BindingResult bindingResult, Model model) {
+    public String create(@ModelAttribute("newUser") @Valid User user) {
         userService.save(user);
         return "redirect:/admin";
     }
 
-    @GetMapping("/edit")
-    public String edit(Model model, @RequestParam("id") Integer id) {
-        model.addAttribute("user", userService.findOne(id));
-        model.addAttribute("allRoles", roleService.findAll());
-        return "edit";
-    }
 
     @PutMapping("/update")
     public String update(@ModelAttribute("user") @Valid User user, @RequestParam("id") Integer id) {

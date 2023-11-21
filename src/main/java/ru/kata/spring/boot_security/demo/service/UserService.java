@@ -13,5 +13,6 @@ public interface UserService {
     void update(int id, User updatedUser);
     void updateWithoutPassword(int id, User updatedUser);
     void delete(int id);
+    User findByName(String name);
     User findByEmail(String email);
 }

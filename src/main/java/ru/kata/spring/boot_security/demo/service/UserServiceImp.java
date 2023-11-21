@@ -64,6 +64,11 @@ public class UserServiceImp implements UserService {
         userRepository.deleteById(id);
     }
 
+    @Override
+    public User findByName(String name) {
+        return userRepository.findUserByName(name);
+    }
+
     @Transactional(readOnly = true)
     @Override
     public User findByEmail(String email) {

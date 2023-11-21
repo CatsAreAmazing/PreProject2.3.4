@@ -30,6 +30,8 @@ public class User implements UserDetails {
     @Column
     private String username;
     @Column
+    private String lastname;
+    @Column
     private Integer age;
     @Column
     @Email
@@ -48,16 +50,18 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(Integer id, String username, Integer age, String email, String password) {
+    public User(Integer id, String username, String lastname, Integer age, String email, String password) {
         this.id = id;
         this.username = username;
+        this.lastname = lastname;
         this.age = age;
         this.email = email;
         this.password = password;
     }
 
-    public User(String username, Integer age, String email, String password, List<Role> roles) {
+    public User(String username, String lastname, Integer age, String email, String password, List<Role> roles) {
         this.username = username;
+        this.lastname = lastname;
         this.age = age;
         this.email = email;
         this.password = password;
@@ -68,6 +72,13 @@ public class User implements UserDetails {
         return id;
     }
 
+    public void setLastName(String lastname){
+        this.lastname = lastname;
+    }
+
+    public String getLastName(){
+        return lastname;
+    }
     public void setId(Integer id) {
         this.id = id;
     }
@@ -144,6 +155,7 @@ public class User implements UserDetails {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
+                ", lastname='" + lastname + '\'' +
                 ", age=" + age +
                 ", email='" + email + '\'' +
                 '}';

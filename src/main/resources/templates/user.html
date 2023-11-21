@@ -1,143 +1,76 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en" class="h-100">
 <head>
     <meta charset="UTF-8">
     <title>Личная страница</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
 </head>
-<style>
-    a {
-        text-decoration: none;
-        color: inherit;
-    }
 
-    .table {
-        border: 1px solid #eee;
-        table-layout: fixed;
-        width: auto;
-    <!-- ну или 100 % --> margin-bottom: 20px;
-    }
+<body class="h-100">
 
-    .table th {
-        font-weight: bold;
-        padding: 5px;
-        background: #efefef;
-        border: 1px solid #dddddd;
-    }
+<div class="h-100 w-auto">
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+        <h3 class="navbar-brand col-md-3 col-lg-2 mr-0 px-4"><span th:text="${user.getEmail()}">VALUE</span>
+            with roles: <span th:text="${user.roleToString()}"></span></h3>
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <form class="inline" th:action="@{/logout}" th:method="POST">
+                    <input type="hidden" name="Logout" value="Logout"/>
+                    <button type="submit" name="submit_param" value="submit_value" class="link-button btn btn-dark">
+                        Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </nav>
 
-    .table td {
-        padding: 5px 10px;
-        border: 1px solid #eee;
-        text-align: left;
-    }
+    <div class="row h-100 w-100">
+        <div class="col-2">
+            <br>
+            <ul class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <li class="nav-item">
+                    <a class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" href="#v-pills-tab"
+                       role="tab" aria-controls="v-pills-home" aria-selected="true">User</a>
+                </li>
+            </ul>
+        </div>
 
-    .table tbody tr:nth-child(odd) {
-        background: #fff;
-    }
+        <div class="col-10 bg-light h-100">
+            <br>
+            <div class="page-header">
+                <h1>User information-page</h1>
+            </div>
+            <div class="card">
+                <h5 class="card-header">About user</h5>
+                <div class="card-body">
+                    <table class="table table-striped align-middle">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Age</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                        </tr>
+                        </thead>
 
-    .table tbody tr:nth-child(even) {
-        background: #F7F7F7;
-    }
-
-    .form-style-8 {
-        font-family: 'Open Sans Condensed', arial, sans;
-        width: auto;
-        padding: 30px;
-        background: #FFFFFF;
-        margin: 50px auto;
-        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
-        -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
-        -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
-
-    }
-
-    .form-style-8 h2 {
-        background: #4D4D4D;
-        text-transform: uppercase;
-        font-family: 'Open Sans Condensed', sans-serif;
-        color: #797979;
-        font-size: 18px;
-        font-weight: 100;
-        padding: 20px;
-        margin: -30px -30px 30px -30px;
-    }
-
-    .form-style-8 input,
-    .form-style-8 button,
-    .form-style-8 textarea,
-    .form-style-8 select {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        outline: none;
-        display: block;
-        width: auto;
-        padding: 7px;
-        border: none;
-        border-bottom: 1px solid #ddd;
-        background: transparent;
-        margin-bottom: 10px;
-        font: 16px Arial, Helvetica, sans-serif;
-        height: 45px;
-    }
-
-    .form-style-8 textarea {
-        resize: none;
-        overflow: hidden;
-    }
-
-    .form-style-8 input[type="button"],
-    .form-style-8 input[type="submit"],
-    .form-style-8 button {
-        -moz-box-shadow: inset 0px 1px 0px 0px #45D6D6;
-        -webkit-box-shadow: inset 0px 1px 0px 0px #45D6D6;
-        box-shadow: inset 0px 1px 0px 0px #45D6D6;
-        background-color: #2CBBBB;
-        border: 1px solid #27A0A0;
-        display: inline-block;
-        cursor: pointer;
-        color: #FFFFFF;
-        font-family: 'Open Sans Condensed', sans-serif;
-        font-size: 14px;
-        padding: 8px 18px;
-        text-decoration: none;
-        text-transform: uppercase;
-    }
-
-    .form-style-8 input[type="button"]:hover,
-    .form-style-8 input[type="submit"]:hover {
-        background: linear-gradient(to bottom, #34CACA 5%, #30C9C9 100%);
-        background-color: #34CACA;
-    }
-</style>
-<body>
-<form style="width: 100%;" th:action="@{/logout}" th:method="POST">
-    <input type="hidden" name="Logout" value="Logout"/>
-    <input type="submit" name="submit_param" value="Logout"/>
-
-</form>
-<h1>Личная страница пользователя</h1>
-<table class="table, form-style-8">
-    <thead>
-    <tr>
-        <th>Id</th>
-        <th>Имя</th>
-        <th>Возраст</th>
-        <th>Email</th>
-        <th>Роли</th>
-    </tr>
-    </thead>
-    <tbody>
-
-    <tr>
-        <td th:text="${user.getId()}"></td>
-        <td th:text="${user.getUsername()}"></td>
-        <td th:text="${user.getAge()}"></td>
-        <td th:text="${user.getEmail()}"></td>
-        <td th:text="${user.roleToString()}"></td>
-    </tr>
-    </tbody>
-</table>
-
+                        <tbody>
+                        <tr>
+                            <td th:text="${user.getId()}"></td>
+                            <td th:text="${user.getUsername()}"></td>
+                            <td th:text="${user.getLastName()}"></td>
+                            <td th:text="${user.getAge()}"></td>
+                            <td th:text="${user.getEmail()}"></td>
+                            <td th:text="${user.roleToString()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

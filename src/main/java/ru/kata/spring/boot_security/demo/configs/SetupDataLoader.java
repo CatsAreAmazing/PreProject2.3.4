@@ -34,8 +34,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         if (alreadySetup) return;
         Role roleAdmin = createRoleIfNotFound("ROLE_ADMIN");
         Role roleUser = createRoleIfNotFound("ROLE_USER");
-        createUserIfNotFound("admin", 30, "admin@mail.ru", "testpass", roleAdmin);
-        createUserIfNotFound("user", 25, "user@mail.ru","test123", roleUser);
+        createUserIfNotFound("admin", "admin", 30, "admin@mail.ru", "testpass", roleAdmin);
+        createUserIfNotFound("user", "user", 25, "user@mail.ru","test123", roleUser);
         alreadySetup = true;
     }
     @Transactional
@@ -48,10 +48,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         return role;
     }
     @Transactional
-    public User createUserIfNotFound(String name, int age, String email, String password, Role role) {
+    public User createUserIfNotFound(String name, String lastName, int age, String email, String password, Role role) {
         User user = userService.findByEmail(email);
         if (user == null) {
-            user = new User(name, age, email, password, List.of(role));
+            user = new User(name, lastName, age, email, password, List.of(role));
             userService.save(user);
         }
         return user;
