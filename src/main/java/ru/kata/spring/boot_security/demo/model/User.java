@@ -2,7 +2,10 @@ package ru.kata.spring.boot_security.demo.model;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,8 +45,9 @@ public class User implements UserDetails {
     //в комментариях писали, что требуют обязательно FetchType.LAZY, хотя конкретно в этом случае я не очень понимаю,
     //в чем разница, потому что мы и так и так рассматриваем все поля ролей, т.е. и ленивая и жадная выглядят одинаково,
     //хотя я, может быть, что-то не так понял...
-    @Column
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Fetch(FetchMode.JOIN)
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_name"))
     private List<Role> roles;
 
 
@@ -105,6 +109,7 @@ public class User implements UserDetails {
 
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
     }
@@ -115,21 +120,25 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

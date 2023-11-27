@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Личная страница</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
 </head>
 
@@ -11,8 +12,7 @@
 
 <div class="h-100 w-auto">
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-        <h3 class="navbar-brand col-md-3 col-lg-2 mr-0 px-4"><span th:text="${user.getEmail()}">VALUE</span>
-            with roles: <span th:text="${user.roleToString()}"></span></h3>
+        <h3 class="navbar-brand col-md-3 col-lg-2 mr-0 px-4"><span id="user-header"></span></h3>
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
                 <form class="inline" th:action="@{/logout}" th:method="POST">
@@ -25,6 +25,7 @@
         </ul>
     </nav>
 
+    <!-- Левая навигация -->
     <div class="row h-100 w-100">
         <div class="col-2">
             <br>
@@ -47,24 +48,15 @@
                     <table class="table table-striped align-middle">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>First name</th>
-                            <th>Last name</th>
-                            <th>Age</th>
-                            <th>Email</th>
-                            <th>Role</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">First name</th>
+                            <th scope="col">Last name</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Role</th>
                         </tr>
                         </thead>
-
-                        <tbody>
-                        <tr>
-                            <td th:text="${user.getId()}"></td>
-                            <td th:text="${user.getUsername()}"></td>
-                            <td th:text="${user.getLastName()}"></td>
-                            <td th:text="${user.getAge()}"></td>
-                            <td th:text="${user.getEmail()}"></td>
-                            <td th:text="${user.roleToString()}"></td>
-                        </tr>
+                        <tbody id="user-table">
                         </tbody>
                     </table>
                 </div>
@@ -72,5 +64,14 @@
         </div>
     </div>
 </div>
+
+
+<script src="/userPage.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
 </body>
 </html>

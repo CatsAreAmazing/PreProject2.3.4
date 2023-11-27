@@ -1,52 +1,57 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.boot.Banner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
+import java.io.Console;
 import java.security.Principal;
+import java.util.List;
 import java.util.Objects;
 
 
-@Controller
+@RestController
 @RequestMapping("/admin")
 public class AdminController {
     private final UserService userService;
-    private final RoleService roleService;
 
 
     public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
-        this.roleService = roleService;
+    }
+    @GetMapping("/viewUser")
+    public ResponseEntity<User> showUser(Principal principal) {
+        return ResponseEntity.ok(userService.findByName(principal.getName()));
     }
 
-    @GetMapping()
-    public String index(Model model, Principal principal) {
-        User admin = userService.findByName(principal.getName());
-        model.addAttribute("admin", admin);
-        model.addAttribute("users", userService.findAll());
-        model.addAttribute("allRoles", roleService.findAll());
-        model.addAttribute("user", new User());
-        model.addAttribute("newUser", new User());
-        return "users";
+    @GetMapping("/")
+    public ResponseEntity<List<User>> index() {
+        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
+    @GetMapping("/user")
+    public User show(@RequestParam("id") Integer id) {
+        return userService.findOne(id);
+    }
+
+
 
     @PostMapping("/create")
-    public String create(@ModelAttribute("newUser") @Valid User user) {
+    public ResponseEntity<HttpStatus> create(@RequestBody @Valid User user) {
         userService.save(user);
-        return "redirect:/admin";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 
     @PutMapping("/update")
-    public String update(@ModelAttribute("user") @Valid User user, @RequestParam("id") Integer id) {
+    public ResponseEntity<HttpStatus> update(@RequestBody @Valid User user, @RequestParam("id") Integer id) {
         //я так и не понял как это делать адекватно, так что сделаю топорно
         User oldUser = userService.findOne(id);
         if (Objects.equals(user.getPassword(), oldUser.getPassword())) {
@@ -54,12 +59,12 @@ public class AdminController {
         } else {
             userService.update(id, user);
         }
-        return "redirect:/admin";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
-    public String delete(@RequestParam("id") int id) {
+    public ResponseEntity<HttpStatus> delete(@RequestParam("id") int id) {
         userService.delete(id);
-        return "redirect:/admin";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

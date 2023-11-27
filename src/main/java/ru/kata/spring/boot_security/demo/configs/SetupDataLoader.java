@@ -11,11 +11,6 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.util.List;
 
-//Большая часть работы сделана по инструкции отсюда, с небольшими модификациями под проект.
-
-//https://for-each.dev/lessons/b/-role-and-privilege-for-spring-security-registration
-
-//И капец в интернете мало адекватный гайдов... И в комментариях тоже не особо.
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
